@@ -10,8 +10,8 @@ export class Cpf{
     }
 
     private validate(rawCpf:string) {
-        if(!rawCpf) return false;
         const cpf = this.cleanCPF(rawCpf);
+        if(!cpf) return false;
         if(!(cpf.length === this.CPF_LENGTH_CPF)) return false;
         if(this.allDigitsCpfAreEquals(cpf)) return false;
         const firstVerifiedDigit = this.calculateVerifyDigitCpf(cpf, this.FACTOR_FIRST_DIGIT_VERIFY);
