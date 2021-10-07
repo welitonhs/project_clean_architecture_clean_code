@@ -7,18 +7,26 @@ export default class Order {
     cpf: Cpf;
     orderItems: OrderItem[];
     coupon: Coupon | undefined;
+    freight: number;
 
-    constructor(cpf: string){
+    constructor(cpf: string, readonly issueDate: Date = new Date()) {
         this.cpf = new Cpf(cpf);
         this.orderItems = [];
+        this.freight = 0;
     }
 
     addItem(item:Item, quantity:number){
+        this.freight += item.getFreight() * quantity;
         this.orderItems.push(new OrderItem(item.id, item.price, quantity));
     }
 
     addCoupon(coupon: Coupon){
+        if(coupon.isExpired(this.issueDate)) return;
         this.coupon = coupon;
+    }
+
+    getFreight(){
+        return this.freight;
     }
 
     getTotal(){

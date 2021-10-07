@@ -29,3 +29,22 @@ test("Deve criar um pedido com três itens e cupom de desconto", function(){
     const total = order.getTotal();
     expect(total).toBe(1600);
 });
+
+test("Não deve aplicar o desconto caso o cupom estiver expirado", function() {
+    const order = new Order("554.624.620-00", new Date('2021-09-01'));
+    order.addItem(new Item(1, "Materiais Esportivos", "Bola de Rugby", 100), 8);
+    order.addItem(new Item(2, "Materiais Esportivos", "Coletes para treino", 10), 20);
+    order.addItem(new Item(3, "Materiais Esportivos", "Chuteiras", 250), 4);
+    order.addCoupon(new Coupon("VALE20", 20, new Date('2021-08-01')));
+    const total = order.getTotal();
+    expect(total).toBe(2000);
+});
+
+test("Deve calcular o frete do pedido", function() {
+    const order = new Order("554.624.620-00", new Date('2021-09-01'));
+    order.addItem(new Item(1, "Materiais Esportivos", "Bola de Rugby", 100, 50, 20, 20, 0.5), 8);
+    order.addItem(new Item(2, "Materiais Esportivos", "Coletes para treino", 10, 55, 85, 0, 0.1), 20);
+    order.addItem(new Item(3, "Materiais Esportivos", "Chuteiras", 250, 10, 45, 5, 0.6), 4);
+    const freight = order.getFreight();
+    expect(freight).toBe(320);
+});
