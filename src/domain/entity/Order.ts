@@ -1,9 +1,9 @@
-import { Coupon } from "./Coupon";
 import { Cpf } from "./Cpf";
+import { Coupon } from "./Coupon";
 import { Item } from "./Item";
 import { OrderItem } from "./OrderItem";
 
-export default class Order {
+class Order {
     cpf: Cpf;
     orderItems: OrderItem[];
     coupon: Coupon | undefined;
@@ -25,6 +25,10 @@ export default class Order {
         this.coupon = coupon;
     }
 
+    getCpf(){
+        return this.cpf;
+    }
+
     getFreight(){
         return this.freight;
     }
@@ -40,3 +44,5 @@ export default class Order {
         return total;
     }
 }
+
+export { Order };

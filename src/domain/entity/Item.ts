@@ -3,7 +3,7 @@ class Item {
     MINIMUM_FREIGHT = 10;
 
     constructor(
-        readonly id:number, 
+        readonly id: number, 
         readonly category: string, 
         readonly description: string, 
         readonly price: number,

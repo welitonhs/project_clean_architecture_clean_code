@@ -1,4 +1,5 @@
-import { Coupon } from "../src/Coupon";
+import { Coupon } from "../src/domain/entity/Coupon";
+
 
 test("Deve criar um cupom quando não for passada a data de expiração", function(){
     const coupon = new Coupon("CUPOM22", 22);

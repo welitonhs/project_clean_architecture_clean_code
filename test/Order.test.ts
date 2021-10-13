@@ -1,6 +1,6 @@
-import { Coupon } from "../src/Coupon";
-import { Item } from "../src/Item";
-import Order from "../src/Order";
+import { Coupon } from "../src/domain/entity/Coupon";
+import { Item } from "../src/domain/entity/Item";
+import { Order } from "../src/domain/entity/Order";
 
 test("Não deve ser possível criar um pedido com cpf inválido!", function(){
     expect(() => new Order("111.111.111-11")).toThrow(new Error("Invalid cpf"));
@@ -28,6 +28,7 @@ test("Deve criar um pedido com três itens e cupom de desconto", function(){
     order.addCoupon(new Coupon("VALE20", 20));
     const total = order.getTotal();
     expect(total).toBe(1600);
+
 });
 
 test("Não deve aplicar o desconto caso o cupom estiver expirado", function() {
