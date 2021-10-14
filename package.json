@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "tsc && jest ./dist",
+    "test": "tsc && jest ./dist --forceExit",
     "clear_test": "jest --clearCache",
     "coverage": "tsc && jest ./dist --coverage"
   },

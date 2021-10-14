@@ -1,13 +1,11 @@
-import { DatabaseConnectionAdapter } from "../src/infra/database/DatabaseConnectionAdapter";
-import { ItemRepositoryDatabase } from "../src/infra/repository/database/ItemRepositoryDatabase";
-import { ItemRepositoryMemory } from "../src/infra/repository/memory/ItemRepositoryMemory";
-import { OrderRepositoryMemory } from "../src/infra/repository/memory/OrderRepositoryMemory";
-import { PlaceOrder } from "../src/application/usecase/PlaceOrder";
+import { ItemRepositoryMemory } from "../../src/infra/repository/memory/ItemRepositoryMemory";
+import { OrderRepositoryMemory } from "../../src/infra/repository/memory/OrderRepositoryMemory";
+import { PlaceOrder } from "../../src/application/usecase/PlaceOrder";
 
 test('Deve ser possível gerar um pedido', async function(){
     const input = {
         cpf: '018.778.110-92',
-        ordemItems: [
+        orderItems: [
             {
                 id: 1,
                 quantity: 8
@@ -22,7 +20,7 @@ test('Deve ser possível gerar um pedido', async function(){
             }
         ]
     };
-    const placeOrder = new PlaceOrder(new ItemRepositoryDatabase(new DatabaseConnectionAdapter()), new OrderRepositoryMemory());
+    const placeOrder = new PlaceOrder(new ItemRepositoryMemory(), new OrderRepositoryMemory());
     const output = await placeOrder.execute(input);
     expect(output.total).toBe(2000);
 });
@@ -30,7 +28,7 @@ test('Deve ser possível gerar um pedido', async function(){
 test('Deve retornar uma exception caso algum dos itens do pedido não exista', async function(){
     const input = {
         cpf: '018.778.110-92',
-        ordemItems: [
+        orderItems: [
             {
                 id: 1,
                 quantity: 8

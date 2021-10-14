@@ -1,6 +1,7 @@
 import { IItemRepository } from "../../domain/repository/IItemRepository";
 import { Order } from "../../domain/entity/Order";
 import { IOrderRepository } from "../../domain/repository/IOrderRepository";
+import { PlaceOrderInput } from "../dto/PlaceOrderInput";
 
 class PlaceOrder {
     
@@ -8,9 +9,9 @@ class PlaceOrder {
         
     }
 
-    async execute(input: any): Promise<any> {  
+    async execute(input: PlaceOrderInput): Promise<any> {  
         const order = new Order(input.cpf);
-        for(const ordemItem of input.ordemItems){
+        for(const ordemItem of input.orderItems){
             const item = await this.itemRepository.findById(ordemItem.id);
             order.addItem(item, ordemItem.quantity);
         }
