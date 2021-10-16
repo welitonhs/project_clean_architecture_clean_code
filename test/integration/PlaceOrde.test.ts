@@ -68,7 +68,7 @@ test('Deve retornar uma exception caso algum dos itens do pedido não exista', a
                 quantity: 20
             },
             {
-                id: 4,
+                id: 999,
                 quantity: 4
             }
         ]
