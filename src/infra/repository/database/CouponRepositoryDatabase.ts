@@ -8,7 +8,7 @@ class CouponRepositoryDatabase implements ICouponRepository {
 
     }
 
-    async findByCode(code: string = ''): Promise<Coupon> {
+    async findByCode(code: string): Promise<Coupon> {
         const [ foundCoupon ] = await this.databaseConnection.query('select * from coupons where code = $1', [code]);
         if(!foundCoupon) throw new Error('Coupon not found');
         const coupon = new Coupon(
