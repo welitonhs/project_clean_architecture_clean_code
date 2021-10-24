@@ -1,8 +1,8 @@
 interface IPlaceOrderInput {
     cpf: string;
-    sequence: number;
-    date: Date;    
+    issueDate: Date;    
     orderItems: any[];
+    coupon?: string;
 }
 
 export { IPlaceOrderInput }

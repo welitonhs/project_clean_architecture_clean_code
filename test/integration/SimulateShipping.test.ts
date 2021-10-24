@@ -3,9 +3,14 @@ import { ISimulateShippingOutput } from "../../src/application/dto/ISimulateShip
 import { SimulatedShipping } from "../../src/application/usecase/SimulateShipping";
 import { DatabaseConnectionAdapter } from "../../src/infra/database/DatabaseConnectionAdapter";
 import { ItemRepositoryDatabase } from "../../src/infra/repository/database/ItemRepositoryDatabase";
-import { ItemRepositoryMemory } from "../../src/infra/repository/memory/ItemRepositoryMemory";
 
-const databaseConnectionAdapter = new DatabaseConnectionAdapter();
+let simulatedShipping: SimulatedShipping;
+
+beforeAll(() => {
+    const databaseConnection = new DatabaseConnectionAdapter();
+    const itemRepositoryDatabase = new ItemRepositoryDatabase(databaseConnection);
+    simulatedShipping = new SimulatedShipping(itemRepositoryDatabase);
+})
 
 test('Deve ser possível simular o valor do frete', async function() {
     const input: ISimulateShippingInput = {
@@ -24,7 +29,6 @@ test('Deve ser possível simular o valor do frete', async function() {
             }
         ],
     };
-    const simulatedShipping = new SimulatedShipping(new ItemRepositoryDatabase(databaseConnectionAdapter));
     const output:ISimulateShippingOutput = await simulatedShipping.execute(input);
     expect(output.value).toBe(320);
 });
@@ -38,7 +42,6 @@ test('Deve ser possível simular o valor do frete', async function(){
             },
         ]
     }
-    const simulatedShipping = new SimulatedShipping(new ItemRepositoryDatabase(databaseConnectionAdapter));
     const output:ISimulateShippingOutput = await simulatedShipping.execute(input);
     expect(output.value).toBe(30);
 })
@@ -61,7 +64,6 @@ test('Deve retornar uma exception caso não tenha encontrado um item', async fun
             }
         ],
     };
-    const simulatedShipping = new SimulatedShipping(new ItemRepositoryMemory());
     await expect(simulatedShipping.execute(input)).rejects.toThrow(new Error('Item not found'));
 });
 

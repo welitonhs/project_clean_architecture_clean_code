@@ -23,13 +23,25 @@ class Order {
         this.orderItems.push(new OrderItem(item.id, item.price, quantity));
     }
 
+    getItems(){
+        return this.orderItems;
+    }
+
     addCoupon(coupon: Coupon){
         if(coupon.isExpired(this.issueDate)) return;
         this.coupon = coupon;
     }
 
+    getCode(){
+        return this.orderCode.value;
+    }
+
     getCpf(){
-        return this.cpf;
+        return this.cpf.value;
+    }
+
+    getCoupon(){
+        return this.coupon?.code;
     }
 
     getFreight(){

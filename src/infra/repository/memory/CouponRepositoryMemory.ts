@@ -6,6 +6,7 @@ class CouponRepositoryMemory implements ICouponRepository {
 
     constructor(){
         this.coupons = [
+            new Coupon('CUPOM20', 20, new Date('2021-11-30')),
             new Coupon('CUPOM22', 22, new Date('2021-11-30')),
             new Coupon('CUPOM50', 50, new Date('2020-11-30'))
         ];

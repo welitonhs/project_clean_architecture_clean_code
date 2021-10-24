@@ -11,6 +11,10 @@ class OrderRepositoryMemory implements IOrderRepository {
     save(order: Order): void {
         this.orders.push(order);
     }
+
+    async count(): Promise<number> {
+        return await this.orders.length;
+    }
 }
 
 export { OrderRepositoryMemory }

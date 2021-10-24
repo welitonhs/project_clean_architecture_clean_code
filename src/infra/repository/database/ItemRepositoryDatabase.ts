@@ -10,7 +10,7 @@ class ItemRepositoryDatabase implements IItemRepository {
 
     async findById(id: number): Promise<Item> {
         const [ foundItem ] = await this.databaseConnection.query("select * from items where id = $1", [id]);
-        if(!foundItem) throw new Error('Not found item');
+        if(!foundItem) throw new Error('Item not found');
         const item = new Item(
             foundItem.id, 
             foundItem.category, 
