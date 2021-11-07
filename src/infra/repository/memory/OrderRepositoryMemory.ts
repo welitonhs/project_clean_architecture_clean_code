@@ -13,7 +13,7 @@ class OrderRepositoryMemory implements IOrderRepository {
     }
 
     async count(): Promise<number> {
-        return await this.orders.length;
+        return this.orders.length;
     }
 }
 

@@ -13,7 +13,7 @@ class PlaceOrder {
 
     async execute(input: IPlaceOrderInput): Promise<IPlaceOrderOutput> {
         let sequence = await this.orderRepository.count();
-        const order = new Order(input.cpf, ++sequence, new Date(input.issueDate));
+        const order = new Order(input.cpf, ++sequence, input.issueDate);
         for(const orderItem of input.orderItems){
             const item = await this.itemRepository.findById(orderItem.id);
             order.addItem(item, orderItem.quantity);

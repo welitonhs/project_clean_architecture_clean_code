@@ -12,11 +12,11 @@ class OrderRepositoryDatabase implements IOrderRepository {
         const [ newOrder ] = await this.databaseConnection.query(`
             insert into "order" 
             (
-                code, cpf, issue_date, freight, sequence, coupon
+                code, cpf, issue_date, freight, sequence, coupon, total
             ) 
             values 
             (
-                $1, $2, $3, $4, $5, $6
+                $1, $2, $3, $4, $5, $6, $7
             ) returning *`, 
             [
                 order.getCode(), 
@@ -24,7 +24,8 @@ class OrderRepositoryDatabase implements IOrderRepository {
                 order.issueDate, 
                 order.getFreight(), 
                 order.sequence,
-                order.getCoupon()
+                order.getCoupon(),
+                order.getTotal()
             ]
         );
         for(const ordemItem of order.getItems()){
@@ -48,7 +49,7 @@ class OrderRepositoryDatabase implements IOrderRepository {
     }
 
     async count(): Promise<number> {
-        const [ orders ] = await this.databaseConnection.query('select count(*) from "order"', []);
+        const [ orders ] = await this.databaseConnection.query('select count(*)::int from "order"', []);
         return parseInt(orders.count);
     }
     
