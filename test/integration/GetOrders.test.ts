@@ -4,23 +4,15 @@ import { PlaceOrder } from '../../src/application/usecase/PlaceOrder';
 import { IOrderDao } from '../../src/infra/dao/IOrderDAO';
 import { OrderDAODatabase } from '../../src/infra/dao/OrderDAODatabase';
 import { DatabaseConnectionAdapter } from '../../src/infra/database/DatabaseConnectionAdapter';
-import { CouponRepositoryDatabase } from '../../src/infra/repository/database/CouponRepositoryDatabase';
-import { ItemRepositoryDatabase } from '../../src/infra/repository/database/ItemRepositoryDatabase';
-import { OrderRepositoryDatabase } from '../../src/infra/repository/database/OrderRepositoryDatabase';
+import { DatabaseRepositoryFactory } from '../../src/infra/factory/DatabaseRepositoryFactory';
 
 let placeOrder: PlaceOrder;
-let orderRepository: OrderRepositoryDatabase;
-let itemRepository: ItemRepositoryDatabase;
-let couponRepository: CouponRepositoryDatabase;
 let getOrders: GetOrders;
 let orderDao: IOrderDao;
 
 beforeAll(() => {
     const databaseConnection = new DatabaseConnectionAdapter();
-    itemRepository = new ItemRepositoryDatabase(databaseConnection);
-    orderRepository = new OrderRepositoryDatabase(databaseConnection);
-    couponRepository = new CouponRepositoryDatabase(databaseConnection);
-    placeOrder = new PlaceOrder(itemRepository, orderRepository, couponRepository);
+    placeOrder = new PlaceOrder(new DatabaseRepositoryFactory(databaseConnection));
     orderDao = new OrderDAODatabase(databaseConnection);
     getOrders = new GetOrders(orderDao);
 })
@@ -45,7 +37,6 @@ test('Deve retornar todos os pedidos', async function(){
     ]
   };
   await placeOrder.execute(input);
-  const qtdOrders = await orderRepository.count();
   const outputGetOrders = await getOrders.execute();
-  expect(outputGetOrders).toHaveLength(qtdOrders);
+  expect(outputGetOrders.length).toBeGreaterThan(1);
 });

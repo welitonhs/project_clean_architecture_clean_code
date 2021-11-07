@@ -1,11 +1,13 @@
+import { IAbstractRepositoryFactory } from "../../domain/factory/IAbstractRepositoryFactory";
 import { IItemRepository } from "../../domain/repository/IItemRepository";
 import { ISimulateShippingInput } from "../dto/ISimulateShippingInput";
 import { ISimulateShippingOutput } from "../dto/ISimulateShippingOutput";
 
 class SimulatedShipping {
+    itemRepository: IItemRepository;
 
-    constructor(readonly itemRepository: IItemRepository){
-
+    constructor(abstractRepositoryFactory: IAbstractRepositoryFactory){
+        this.itemRepository = abstractRepositoryFactory.itemRepository();
     }
 
     async execute(input: ISimulateShippingInput): Promise<ISimulateShippingOutput> {

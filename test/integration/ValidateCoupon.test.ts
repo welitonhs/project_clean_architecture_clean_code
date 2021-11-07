@@ -1,15 +1,13 @@
 import { IValidateCouponInput } from "../../src/application/dto/IValidateCouponInput";
 import { ValidateCoupon } from "../../src/application/usecase/ValidateCoupon";
 import { DatabaseConnectionAdapter } from "../../src/infra/database/DatabaseConnectionAdapter";
-import { CouponRepositoryDatabase } from "../../src/infra/repository/database/CouponRepositoryDatabase";
-import { CouponRepositoryMemory } from "../../src/infra/repository/memory/CouponRepositoryMemory";
+import { DatabaseRepositoryFactory } from "../../src/infra/factory/DatabaseRepositoryFactory";
 
 let validateCoupon: ValidateCoupon;
 
 beforeAll(()=>{
     const databaseConnection = new DatabaseConnectionAdapter();
-    const couponRepository = new CouponRepositoryDatabase(databaseConnection)
-    validateCoupon = new ValidateCoupon(couponRepository);
+    validateCoupon = new ValidateCoupon(new DatabaseRepositoryFactory(databaseConnection));
 });
 
 test('Deve retornar verdadeiro se o cupom de desconto não estiver com data de expiração vencida', async function(){

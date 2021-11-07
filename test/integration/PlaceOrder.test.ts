@@ -1,22 +1,14 @@
 import { PlaceOrder } from "../../src/application/usecase/PlaceOrder";
 import { IPlaceOrderInput } from "../../src/application/dto/IPlaceOrderInput";
 import { DatabaseConnectionAdapter } from "../../src/infra/database/DatabaseConnectionAdapter";
-import { ItemRepositoryDatabase } from "../../src/infra/repository/database/ItemRepositoryDatabase";
+import { DatabaseRepositoryFactory } from "../../src/infra/factory/DatabaseRepositoryFactory";
 import { OrderRepositoryDatabase } from "../../src/infra/repository/database/OrderRepositoryDatabase";
-import { CouponRepositoryDatabase } from "../../src/infra/repository/database/CouponRepositoryDatabase";
 
 let placeOrder: PlaceOrder;
-let orderRepository: OrderRepositoryDatabase;
-let itemRepository: ItemRepositoryDatabase;
-let couponRepository: CouponRepositoryDatabase;
 
 beforeAll(() => {
     const databaseConnection = new DatabaseConnectionAdapter();
-    itemRepository = new ItemRepositoryDatabase(databaseConnection);
-    orderRepository = new OrderRepositoryDatabase(databaseConnection);
-    couponRepository = new CouponRepositoryDatabase(databaseConnection);
-
-    placeOrder = new PlaceOrder(itemRepository, orderRepository, couponRepository);
+    placeOrder = new PlaceOrder(new DatabaseRepositoryFactory(databaseConnection));
 })
 
 test('Deve ser possível gerar um pedido com código', async function(){
@@ -39,9 +31,7 @@ test('Deve ser possível gerar um pedido com código', async function(){
         ]
     };
     const output = await placeOrder.execute(input);
-    let quantity_orders = await orderRepository.count();
-    const sequence_order = `${quantity_orders}`.padStart(8, "0");
-    expect(output.orderCode).toBe(`2021${sequence_order}`);
+    expect(output.orderCode).toHaveLength(12);
 });
 
 test('Deve ser possível gerar um pedido', async function(){

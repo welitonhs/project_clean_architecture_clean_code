@@ -2,14 +2,13 @@ import { ISimulateShippingInput } from "../../src/application/dto/ISimulateShipp
 import { ISimulateShippingOutput } from "../../src/application/dto/ISimulateShippingOutput";
 import { SimulatedShipping } from "../../src/application/usecase/SimulateShipping";
 import { DatabaseConnectionAdapter } from "../../src/infra/database/DatabaseConnectionAdapter";
-import { ItemRepositoryDatabase } from "../../src/infra/repository/database/ItemRepositoryDatabase";
+import { DatabaseRepositoryFactory } from "../../src/infra/factory/DatabaseRepositoryFactory";
 
 let simulatedShipping: SimulatedShipping;
 
 beforeAll(() => {
     const databaseConnection = new DatabaseConnectionAdapter();
-    const itemRepositoryDatabase = new ItemRepositoryDatabase(databaseConnection);
-    simulatedShipping = new SimulatedShipping(itemRepositoryDatabase);
+    simulatedShipping = new SimulatedShipping(new DatabaseRepositoryFactory(databaseConnection));
 })
 
 test('Deve ser possível simular o valor do frete', async function() {

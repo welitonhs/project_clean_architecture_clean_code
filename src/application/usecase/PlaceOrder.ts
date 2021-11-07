@@ -4,16 +4,23 @@ import { IOrderRepository } from "../../domain/repository/IOrderRepository";
 import { IPlaceOrderInput } from "../dto/IPlaceOrderInput";
 import { IPlaceOrderOutput } from "../dto/IPlaceOrderOutput";
 import { ICouponRepository } from "../../domain/repository/ICouponRepository";
+import { IAbstractRepositoryFactory } from "../../domain/factory/IAbstractRepositoryFactory";
 
 class PlaceOrder {
+    orderRepository: IOrderRepository;
+    itemRepository: IItemRepository;
+    couponRepository: ICouponRepository;
     
-    constructor(readonly itemRepository: IItemRepository, readonly orderRepository: IOrderRepository, readonly couponRepository: ICouponRepository){
-        
+    constructor(abstractRepository: IAbstractRepositoryFactory){
+        this.orderRepository = abstractRepository.orderRepository();
+        this.itemRepository = abstractRepository.itemRepository();
+        this.couponRepository = abstractRepository.couponRepository();
     }
 
     async execute(input: IPlaceOrderInput): Promise<IPlaceOrderOutput> {
         let sequence = await this.orderRepository.count();
-        const order = new Order(input.cpf, ++sequence, input.issueDate);
+        const nextSequence = sequence + 1;
+        const order = new Order(input.cpf, nextSequence, input.issueDate);
         for(const orderItem of input.orderItems){
             const item = await this.itemRepository.findById(orderItem.id);
             order.addItem(item, orderItem.quantity);
