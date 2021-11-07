@@ -5,6 +5,7 @@ import { IPlaceOrderInput } from "../dto/IPlaceOrderInput";
 import { IPlaceOrderOutput } from "../dto/IPlaceOrderOutput";
 import { ICouponRepository } from "../../domain/repository/ICouponRepository";
 import { IAbstractRepositoryFactory } from "../../domain/factory/IAbstractRepositoryFactory";
+import { FreightCalculator } from "../../domain/service/FreightCalculator";
 
 class PlaceOrder {
     orderRepository: IOrderRepository;
@@ -21,10 +22,13 @@ class PlaceOrder {
         let sequence = await this.orderRepository.count();
         const nextSequence = sequence + 1;
         const order = new Order(input.cpf, nextSequence, input.issueDate);
+        let freight = 0;
         for(const orderItem of input.orderItems){
             const item = await this.itemRepository.findById(orderItem.id);
+            freight += FreightCalculator.calculate(item) * orderItem.quantity;
             order.addItem(item, orderItem.quantity);
         }
+        order.setFreight(freight);
         if(input.coupon){
             const coupon = await this.couponRepository.findByCode(input.coupon);
             order.addCoupon(coupon);

@@ -22,11 +22,6 @@ class Item {
     getDensity(){
         return Math.trunc(this.weight / this.getVolume());
     }
-
-    getFreight(){
-        const freight = this.DISTANCE * this.getVolume() * (this.getDensity()/100);
-        return freight > this.MINIMUM_FREIGHT ? freight : this.MINIMUM_FREIGHT;
-    }
 }
 
 export { Item };

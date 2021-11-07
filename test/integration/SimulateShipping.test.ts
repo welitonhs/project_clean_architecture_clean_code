@@ -1,19 +1,19 @@
-import { ISimulateShippingInput } from "../../src/application/dto/ISimulateShippingInput";
-import { ISimulateShippingOutput } from "../../src/application/dto/ISimulateShippingOutput";
-import { SimulatedShipping } from "../../src/application/usecase/SimulateShipping";
+import { ISimulateFreightInput } from "../../src/application/dto/ISimulateFreightInput";
+import { ISimulateFreightOutput } from "../../src/application/dto/ISimulateFreightOutput";
+import { SimulateFreight } from "../../src/application/usecase/SimulateFreight";
 import { DatabaseConnectionAdapter } from "../../src/infra/database/DatabaseConnectionAdapter";
 import { DatabaseRepositoryFactory } from "../../src/infra/factory/DatabaseRepositoryFactory";
 
-let simulatedShipping: SimulatedShipping;
+let simulatedFreight: SimulateFreight;
 
 beforeAll(() => {
     const databaseConnection = new DatabaseConnectionAdapter();
-    simulatedShipping = new SimulatedShipping(new DatabaseRepositoryFactory(databaseConnection));
+    simulatedFreight = new SimulateFreight(new DatabaseRepositoryFactory(databaseConnection));
 })
 
 test('Deve ser possível simular o valor do frete', async function() {
-    const input: ISimulateShippingInput = {
-        shippingItems: [
+    const input: ISimulateFreightInput = {
+        freightItems: [
             {
                 id: 1,
                 quantity: 8
@@ -28,27 +28,27 @@ test('Deve ser possível simular o valor do frete', async function() {
             }
         ],
     };
-    const output:ISimulateShippingOutput = await simulatedShipping.execute(input);
+    const output:ISimulateFreightOutput = await simulatedFreight.execute(input);
     expect(output.value).toBe(320);
 });
 
 test('Deve ser possível simular o valor do frete', async function(){
-    const input: ISimulateShippingInput = {
-        shippingItems: [
+    const input: ISimulateFreightInput = {
+        freightItems: [
             {
                 id: 4,
                 quantity: 1
             },
         ]
     }
-    const output:ISimulateShippingOutput = await simulatedShipping.execute(input);
+    const output:ISimulateFreightOutput = await simulatedFreight.execute(input);
     expect(output.value).toBe(30);
 })
 
 
 test('Deve retornar uma exception caso não tenha encontrado um item', async function() {
-    const input: ISimulateShippingInput = {
-        shippingItems: [
+    const input: ISimulateFreightInput = {
+        freightItems: [
             {
                 id: 1,
                 quantity: 8
@@ -63,6 +63,6 @@ test('Deve retornar uma exception caso não tenha encontrado um item', async fun
             }
         ],
     };
-    await expect(simulatedShipping.execute(input)).rejects.toThrow(new Error('Item not found'));
+    await expect(simulatedFreight.execute(input)).rejects.toThrow(new Error('Item not found'));
 });
 

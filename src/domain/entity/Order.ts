@@ -19,7 +19,6 @@ class Order {
     }
 
     addItem(item:Item, quantity:number){
-        this.freight += item.getFreight() * quantity;
         this.orderItems.push(new OrderItem(item.id, item.price, quantity));
     }
 
@@ -42,6 +41,10 @@ class Order {
 
     getCoupon(){
         return this.coupon?.code;
+    }
+
+    setFreight(freight: number){
+        this.freight = freight;
     }
 
     getFreight(){
